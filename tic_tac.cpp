@@ -1,210 +1,181 @@
-#include<bits/stdc++.h>
-using namespace std;
+import java.util.Scanner;
+import java.util.Random;
 
-char board[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
-void show_board();
-void get_x_player_choice();
-void get_o_player_choice();
-void get_computer_choice();
-int count_board(char symbol);
-char check_winner();
-void computer_vs_player();
-void player_vs_player();
+public class TicTacToe {
+    static char[] board = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
 
-
-int main(){
-    int mode;
-    cout<< "1. Computer VS Player"<< endl;
-    cout<< "2. Player VS Player"<< endl;
-    cout<< "Select game mode"<< endl;
-    cin>> mode;
-    switch (mode)
-    {
-    case 1:
-        computer_vs_player();
-        break;
-    case 2:
-        player_vs_player();
-        break;
-    default:
-        cout<< "Please select valid game mode"<< endl;
-        break;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int mode;
+        System.out.println("1. Computer VS Player");
+        System.out.println("2. Player VS Player");
+        System.out.println("Select game mode");
+        mode = scanner.nextInt();
+        switch (mode) {
+            case 1:
+                computerVsPlayer();
+                break;
+            case 2:
+                playerVsPlayer();
+                break;
+            default:
+                System.out.println("Please select a valid game mode");
+                break;
+        }
+        scanner.close();
     }
-    return 0;
-}
 
-void computer_vs_player(){
-    string player_name;
-    cout<<"Enter your name: ";
-    cin>> player_name;
-    while(true){
-        system("cls");
-        show_board();
-        if(count_board('X') == count_board('O')){
-            cout<< player_name << "'s turn." << endl;
-            get_x_player_choice();
-        }
-        else{
-            get_computer_choice();
-        }
+    public static void computerVsPlayer() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your name: ");
+        String player_name = scanner.next();
+        while (true) {
+            clearScreen();
+            showBoard();
+            if (countBoard('X') == countBoard('O')) {
+                System.out.println(player_name + "'s turn.");
+                getXPlayerChoice();
+            } else {
+                getComputerChoice();
+            }
 
-        char winner = check_winner();
-        if(winner == 'X'){
-            system("cls");
-            show_board();
-            cout<< player_name << " Won the game."<<endl;
-            break;
+            char winner = checkWinner();
+            if (winner == 'X') {
+                clearScreen();
+                showBoard();
+                System.out.println(player_name + " Won the game.");
+                break;
+            } else if (winner == 'O') {
+                clearScreen();
+                showBoard();
+                System.out.println("Computer won the game.");
+                break;
+            } else if (winner == 'D') {
+                System.out.println("Game is Draw.");
+                break;
+            }
         }
-        else if(winner == 'O'){
-            system("cls");
-            show_board();
-            cout<<"Computer won the game."<<endl;
-            break;  
-        }
-        else if(winner == 'D'){
-            cout<<"Game is Draw."<<endl;
-            break;
-        }
+        scanner.close();
     }
-}
 
-void player_vs_player(){
-    string x_player_name, o_player_name;
-    cout<< "Enter X player name: ";
-    cin>>x_player_name;
-    cout<< "Enter O player name: ";
-    cin>>o_player_name;
-    while(true){
-        system("cls");
-        show_board();
-        if(count_board('X') == count_board('O')){
-            cout<< x_player_name << "'s turn."<<endl;
-            get_x_player_choice();
+    public static void playerVsPlayer() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter X player name: ");
+        String x_player_name = scanner.next();
+        System.out.print("Enter O player name: ");
+        String o_player_name = scanner.next();
+        while (true) {
+            clearScreen();
+            showBoard();
+            if (countBoard('X') == countBoard('O')) {
+                System.out.println(x_player_name + "'s turn.");
+                getXPlayerChoice();
+            } else {
+                System.out.println(o_player_name + "'s turn.");
+                getOPlayerChoice();
+            }
+            char winner = checkWinner();
+            if (winner == 'X') {
+                clearScreen();
+                showBoard();
+                System.out.println(x_player_name + " Won the game.");
+                break;
+            } else if (winner == 'O') {
+                clearScreen();
+                showBoard();
+                System.out.println(o_player_name + " Won the game.");
+                break;
+            } else if (winner == 'D') {
+                System.out.println("Game is Draw.");
+                break;
+            }
         }
-        else{
-            cout<< o_player_name << "'s turn."<< endl;
-            get_o_player_choice();
-        }
-        char winner = check_winner();
-        if(winner == 'X'){
-            system("cls");
-            show_board();
-            cout<< x_player_name << " Won the game."<< endl;
-            break;
-        }
-        else if(winner == 'O'){
-            system("cls");
-            show_board();
-            cout<< o_player_name << " Won the game." <<endl;
-            break;
-        }
-        else if(winner == 'D'){
-            cout<<"Game is Draw."<<endl;
-            break;
-        }
+        scanner.close();
     }
-}
 
-void get_computer_choice(){
-    srand(time(0));
-    int choice;
-    do{
-        choice = rand()%10;
-    }while(board[choice] != ' ');
-    board[choice] = 'O';
-}
-
-void get_x_player_choice(){
-    while (true){
-        cout<<"Select your position (1-9):"<<endl;
+    public static void getComputerChoice() {
+        Random random = new Random();
         int choice;
-        cin>>choice;
-        choice--;
-        if(choice<0 || choice>8){
-            cout<<"Please select your choice from (1-9)."<<endl;
+        do {
+            choice = random.nextInt(9);
+        } while (board[choice] != ' ');
+        board[choice] = 'O';
+    }
+
+    public static void getXPlayerChoice() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("Select your position (1-9):");
+            int choice = scanner.nextInt();
+            choice--;
+            if (choice < 0 || choice > 8) {
+                System.out.println("Please select your choice from (1-9).");
+            } else if (board[choice] != ' ') {
+                System.out.println("Please select an empty position.");
+            } else {
+                board[choice] = 'X';
+                break;
+            }
         }
-        else if(board[choice]!=' '){
-            cout<<"Please select an empty position."<<endl;
+        scanner.close();
+    }
+
+    public static void getOPlayerChoice() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("Select your position (1-9):");
+            int choice = scanner.nextInt();
+            choice--;
+            if (choice < 0 || choice > 8) {
+                System.out.println("Please select your choice from (1-9).");
+            } else if (board[choice] != ' ') {
+                System.out.println("Please select an empty position.");
+            } else {
+                board[choice] = 'O';
+                break;
+            }
         }
-        else{
-            board[choice] = 'X';
-            break;
+        scanner.close();
+    }
+
+    public static int countBoard(char symbol) {
+        int total = 0;
+        for (int i = 0; i < 9; i++) {
+            if (board[i] == symbol) {
+                total++;
+            }
+        }
+        return total;
+    }
+
+    public static char checkWinner() {
+        if (board[0] == board[1] && board[1] == board[2] && board[0] != ' ') return board[0];
+        if (board[3] == board[4] && board[4] == board[5] && board[3] != ' ') return board[3];
+        if (board[6] == board[7] && board[7] == board[8] && board[6] != ' ') return board[6];
+        if (board[0] == board[3] && board[3] == board[6] && board[0] != ' ') return board[0];
+        if (board[1] == board[4] && board[4] == board[7] && board[1] != ' ') return board[1];
+        if (board[2] == board[5] && board[5] == board[8] && board[2] != ' ') return board[2];
+        if (board[0] == board[4] && board[4] == board[8] && board[0] != ' ') return board[0];
+        if (board[2] == board[4] && board[4] == board[6] && board[2] != ' ') return board[2;
+        if (countBoard('X') + countBoard('O') < 9) return 'C';
+        else return 'D';
+    }
+
+    public static void showBoard() {
+        System.out.println("     |     |     ");
+        System.out.println("  " + board[0] + "  |  " + board[1] + "  |  " + board[2]);
+        System.out.println("_____|_____|_____");
+        System.out.println("     |     |     ");
+        System.out.println("  " + board[3] + "  |  " + board[4] + "  |  " + board[5]);
+        System.out.println("_____|_____|_____");
+        System.out.println("     |     |     ");
+        System.out.println("  " + board[6] + "  |  " + board[7] + "  |  " + board[8]);
+        System.out.println("     |     |     \n");
+    }
+
+    public static void clearScreen() {
+        for (int i = 0; i < 50; i++) {
+            System.out.println();
         }
     }
-}
-
-void get_o_player_choice(){
-    while (true){
-        cout<<"Select your position (1-9):"<<endl;
-        int choice;
-        cin>>choice;
-        choice--;
-        if(choice<0 || choice>8){
-            cout<<"Please select your choice from (1-9)."<<endl;
-        }
-        else if(board[choice]!=' '){
-            cout<<"Please select an empty position."<<endl;
-        }
-        else{
-            board[choice] = 'O';
-            break;
-        }
-    }
-}
-
-int count_board(char symbol){
-    int total = 0;
-    for(int i=0; i<9; i++){
-        if(board[i]==symbol){
-            total++;
-        }
-    }
-    return total;
-}
-
-char check_winner(){
-    // for horizontal row
-    if(board[0]==board[1] && board[1]==board[2] && board[0] != ' ')
-        return board[0];
-    if(board[3]==board[4] && board[4]==board[5] && board[3] != ' ')
-        return board[3];
-    if(board[6]==board[7] && board[7]==board[8] && board[6] != ' ')
-        return board[6];
-
-    // for vertical row
-    if(board[0]==board[3] && board[3]==board[6] && board[0] != ' ')
-        return board[0];
-    if(board[1]==board[4] && board[4]==board[7] && board[1] != ' ')
-        return board[1];
-    if(board[2]==board[5] && board[5]==board[8] && board[2] != ' ')
-        return board[2];
-
-    // for diagonal row
-    if(board[0]==board[4] && board[4]==board[8] && board[0] != ' ')
-        return board[0];
-    if(board[2]==board[4] && board[4]==board[6] && board[2] != ' ')
-        return board[2];
-    if(count_board('X') + count_board('O') < 9)
-        return 'C';
-    else
-        return 'D';
-}
-
-void show_board(){
-    
-    cout << "     |     |     " << endl;
-
-    cout << "  " << board[0] << "  |  " << board[1] << "  |  " << board[2] << endl;
-
-    cout << "_____|_____|_____" << endl;
-    cout << "     |     |     " << endl;
-
-    cout << "  " << board[3] << "  |  " << board[4] << "  |  " << board[5] << endl;
-
-    cout << "_____|_____|_____" << endl;
-    cout << "     |     |     " << endl;
-
-    cout << "  " << board[6] << "  |  " << board[7] << "  |  " << board[8] << endl;
-
-    cout << "     |     |     " << endl << endl;
 }
